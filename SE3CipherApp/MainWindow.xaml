@@ -1,0 +1,21 @@
+﻿<Window x:Class="SE3CipherApp.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:SE3CipherApp"
+        mc:Ignorable="d"
+        Title="Vigenère Cipher" Height="450" Width="800">
+    <Grid>
+        <StackPanel>
+            <TextBlock Text="Input Text:" Margin="10,0,0,0"/>
+            <TextBox x:Name="InputTextBox" Text="{Binding InputText, UpdateSourceTrigger=PropertyChanged}" Margin="10"/>
+            <TextBlock Text="Key:" Margin="10,0,10,0"/>
+            <TextBox x:Name="KeyTextBox" Text="{Binding Key, UpdateSourceTrigger=PropertyChanged}" Margin="10"/>
+            <Button x:Name="EncryptButton" Content="Encrypt" Command="{Binding EncryptCommand}" Margin="10"/>
+            <Button x:Name="DecryptButton" Content="Decrypt" Command="{Binding DecryptCommand}" Margin="10"/>
+            <TextBlock Text="Output Text:" Margin="10,0,10,0"/>
+            <TextBox x:Name="OutputTextBox" Text="{Binding OutputText}" IsReadOnly="True" Margin="10"/>
+        </StackPanel>
+    </Grid>
+</Window>
