@@ -7,15 +7,26 @@
         mc:Ignorable="d"
         Title="Vigenère Cipher" Height="450" Width="800">
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
         <StackPanel>
-            <TextBlock Text="Input Text:" Margin="10,0,0,0"/>
+            <TextBlock Text="Input Text:" Margin="10,0,10,-10"/>
             <TextBox x:Name="InputTextBox" Text="{Binding InputText, UpdateSourceTrigger=PropertyChanged}" Margin="10"/>
-            <TextBlock Text="Key:" Margin="10,0,10,0"/>
+            <TextBlock Text="Key:" Margin="10,0,10,-10"/>
             <TextBox x:Name="KeyTextBox" Text="{Binding Key, UpdateSourceTrigger=PropertyChanged}" Margin="10"/>
             <Button x:Name="EncryptButton" Content="Encrypt" Command="{Binding EncryptCommand}" Margin="10"/>
             <Button x:Name="DecryptButton" Content="Decrypt" Command="{Binding DecryptCommand}" Margin="10"/>
-            <TextBlock Text="Output Text:" Margin="10,0,10,0"/>
+            <TextBlock Text="Output Text:" Margin="10,0,10,-10"/>
             <TextBox x:Name="OutputTextBox" Text="{Binding OutputText}" IsReadOnly="True" Margin="10"/>
         </StackPanel>
+        <DataGrid Grid.Row="1" ItemsSource="{Binding CipherRecords}" AutoGenerateColumns="False" Margin="10">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Input Text" Binding="{Binding DecryptText}" Width="*" CanUserSort="False"/>
+                <DataGridTextColumn Header="Key" Binding="{Binding Key}" Width="*" CanUserSort="False"/>
+                <DataGridTextColumn Header="Output Text" Binding="{Binding EncryptText}" Width="*" CanUserSort="False"/>
+            </DataGrid.Columns>
+        </DataGrid>
     </Grid>
 </Window>

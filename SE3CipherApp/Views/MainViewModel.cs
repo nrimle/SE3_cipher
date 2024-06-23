@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -15,6 +16,7 @@ namespace SE3CipherApp.Views
         private string _inputText;
         private string _key;
         private string _outputText;
+        private ObservableCollection<EncryptionModel> _cipherRecords;
 
         public string InputText
         {
@@ -46,6 +48,16 @@ namespace SE3CipherApp.Views
             }
         }
 
+        public ObservableCollection<EncryptionModel> CipherRecords
+        {
+            get { return _cipherRecords; }
+            set
+            {
+                _cipherRecords = value;
+                OnPropertyChanged(nameof(CipherRecords));
+            }
+        }
+
         public ICommand EncryptCommand { get; }
         public ICommand DecryptCommand { get; }
 
@@ -53,6 +65,7 @@ namespace SE3CipherApp.Views
         {
             EncryptCommand = new RelayCommand(Encrypt);
             DecryptCommand = new RelayCommand(Decrypt);
+            CipherRecords = new ObservableCollection<EncryptionModel>(DatabaseHelper.GetLastFiveRecords());
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -68,7 +81,7 @@ namespace SE3CipherApp.Views
                 return;
 
             OutputText = VigenereCipher.Encrypt(InputText, Key);
-            SaveToDatabase(InputText, OutputText, Key);
+            AddCipherRecord(InputText, OutputText, Key);
         }
 
         public void Decrypt()
@@ -77,7 +90,7 @@ namespace SE3CipherApp.Views
                 return;
 
             OutputText = VigenereCipher.Decrypt(InputText, Key);
-            SaveToDatabase(OutputText, InputText, Key);
+            AddCipherRecord(InputText, OutputText, Key);
         }
 
         private void SaveToDatabase(string plainText, string cipherText, string key)
@@ -90,6 +103,19 @@ namespace SE3CipherApp.Views
                 TimeStamp = DateTime.Now
             };
             DatabaseHelper.SaveEncryption(encryption);
+        }
+
+        private void AddCipherRecord(string inputText, string outputText, string key)
+        {
+            SaveToDatabase(inputText, outputText, key);
+
+            // Aktualisieren der ObservableCollection mit den letzten 5 Einträgen
+            var lastFiveRecords = DatabaseHelper.GetLastFiveRecords();
+            CipherRecords.Clear();
+            foreach (var record in lastFiveRecords)
+            {
+                CipherRecords.Add(record);
+            }
         }
     }
 }
